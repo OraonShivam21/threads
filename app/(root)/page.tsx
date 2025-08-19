@@ -1,7 +1,9 @@
-export default function Home() {
+import { UserButton } from "@clerk/nextjs";
+
+export default function HomePage() {
   return (
-    <main>
-      <h1>Thread</h1>
-    </main>
+    <div>
+      <UserButton afterSwitchSessionUrl="/" />
+    </div>
   );
 }

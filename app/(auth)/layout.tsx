@@ -10,7 +10,7 @@ export const metadata = {
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({
+export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className}`}>{children}</body>
+        <body className={`${inter.className} bg-dark-1`}>{children}</body>
       </html>
     </ClerkProvider>
   );
