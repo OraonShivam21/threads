@@ -35,10 +35,10 @@ export default function AccountProfile({ user, btnTitle }: Props) {
   const form = useForm({
     resolver: zodResolver(userValidation),
     defaultValues: {
-      profile_photo: "",
-      name: "",
-      username: "",
-      bio: "",
+      profile_photo: user?.image || "",
+      name: user?.name || "",
+      username: user?.username || "",
+      bio: user?.bio || "",
     },
   });
 
@@ -145,8 +145,8 @@ export default function AccountProfile({ user, btnTitle }: Props) {
               </FormLabel>
               <FormControl>
                 <Textarea
-                  rows={10}
-                  className="account-form_input no-focus"
+                  rows={6}
+                  className="account-form_input no-focus resize-none"
                   {...field}
                 />
               </FormControl>
