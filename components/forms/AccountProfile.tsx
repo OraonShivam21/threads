@@ -16,8 +16,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { ChangeEvent } from "react";
-import { Textarea } from "../ui/textarea";
+import { ChangeEvent, useState } from "react";
+import { useUploadThing } from "@/lib/uploadthing";
+import { Textarea } from "@/components/ui/textarea";
+import { isBase64Image } from "@/lib/utils";
 
 interface Props {
   user: {
@@ -32,6 +34,9 @@ interface Props {
 }
 
 export default function AccountProfile({ user, btnTitle }: Props) {
+  const [files, setFiles] = useState<File[]>([]);
+  const { startUpload } = useUploadThing("media");
+
   const form = useForm({
     resolver: zodResolver(userValidation),
     defaultValues: {
@@ -43,14 +48,44 @@ export default function AccountProfile({ user, btnTitle }: Props) {
   });
 
   const handleImage = (
-    event: ChangeEvent,
+    event: ChangeEvent<HTMLInputElement>,
     fieldChange: (value: string) => void
   ) => {
     event.preventDefault();
+
+    const fileReader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const file = event.target.files[0];
+
+      setFiles(Array.from(event.target.files));
+
+      if (!file.type.includes("image")) return;
+
+      fileReader.onload = async (e) => {
+        const imageDataUrl = e.target?.result?.toString() || "";
+
+        fieldChange(imageDataUrl);
+      };
+
+      fileReader.readAsDataURL(file);
+    }
   };
 
-  const onSubmit = (values: z.infer<typeof userValidation>) => {
-    console.log("onSubmit", values);
+  const onSubmit = async (values: z.infer<typeof userValidation>) => {
+    const blob = values.profile_photo;
+
+    const hasImageChanged = isBase64Image(blob);
+
+    if (hasImageChanged) {
+      const imgRes = await startUpload(files);
+
+      if (imgRes && imgRes[0].fileUrl) {
+        values.profile_photo = imgRes[0].fileUrl;
+      }
+    }
+
+    // update user profile
   };
 
   return (
