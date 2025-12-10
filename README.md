@@ -34,3 +34,50 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Folder Structure
+/threads
+├── /app                    # The main routing directory
+│   ├── favicon.ico
+│   ├── globals.css         # Tailwind imports
+│   ├── (auth)              # Route Group: Auth pages (different layout)
+│   │   ├── layout.tsx      # Layout specifically for login/signup (centered box)
+│   │   ├── sign-in
+│   │   │   └── page.tsx
+│   │   └── sign-up
+│   │       └── page.tsx
+│   ├── (root)              # Route Group: Main App (Navbar + Sidebar layout)
+│   │   ├── layout.tsx      # Main layout with Header/Footer
+│   │   ├── page.tsx        # The Home Feed
+│   │   ├── create-thread
+│   │   │   └── page.tsx
+│   │   └── profile
+│   │       └── [id]        # Dynamic Route for user profiles
+│   │           └── page.tsx
+│   └── api                 # (Optional) API routes (use Server Actions instead!)
+│       └── uploadthing     # Route for UploadThing webhook
+│           └── route.ts
+├── /components             # React Components
+│   ├── /forms              # Complex forms (React Hook Form + Zod)
+│   │   ├── AccountProfile.tsx
+│   │   └── PostThread.tsx
+│   ├── /cards              # UI Cards
+│   │   ├── ThreadCard.tsx
+│   │   └── UserCard.tsx
+│   └── /shared             # Reusable UI (Navbar, Sidebar, Loader)
+│       ├── Topbar.tsx
+│       └── LeftSidebar.tsx
+├── /constants              # Static data (sidebar links, icons map)
+│   └── index.js
+├── /lib                    # Backend logic & Utilities
+│   ├── mongoose.ts         # DB Connection logic
+│   ├── utils.ts            # CN class merger (standard in Shadcn UI)
+│   ├── /actions            # SERVER ACTIONS (Your main backend logic)
+│   │   ├── user.actions.ts
+│   │   └── thread.actions.ts
+│   ├── /models             # Mongoose Schemas
+│   │   ├── user.model.ts
+│   │   └── thread.model.ts
+│   └── /validations        # Zod Schemas
+│       └── user.ts
+└── middleware.ts           # Auth middleware (protects routes)
